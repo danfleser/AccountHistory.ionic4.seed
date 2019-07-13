@@ -16,30 +16,21 @@ import { IonSlides } from '@ionic/angular';
 })
 export class AccountHistoryPage implements OnInit, OnDestroy {
 
-  @ViewChild(IonSlides) monthsSlider: IonSlides;
+  @ViewChild('monthsSlider') monthsSlider: IonSlides;
 
   private userSubscription: Subscription;
   private accountSubscription: Subscription;
   private transactionSubscription: Subscription;
   private slideOpts: any = {
     centeredSlides: true,
-    slidesPerView: 4,
-    spaceBetween: 40,
-    observer: true,
+    slidesPerView: 5,
+    spaceBetween: 20,
     breakpoints: {
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 10
-      },
       480: {
         slidesPerView: 2,
         spaceBetween: 20
       },
-      640: {
-        slidesPerView: 3,
-        spaceBetween: 30
-      }
-
+   
     }
   };
 
@@ -51,6 +42,7 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
   private selectedAccount: Account;
   private transactions: Transaction[] = [];
   private transactionsMonths: FormattedDate[];
+  private startMonthBalance: number;
   private loader: boolean;
 
   private accountBalance: number;
@@ -69,13 +61,9 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
     })
   }
 
-  selectMonth() {
-    this.monthsSlider
-      .getActiveIndex()
-      .then((index) => {
-        this.selectedDate = this.transactionsMonths[index];
-        this.getTransactionsForMonth(this.selectedAccount.id);
-      });
+  selectMonth(index) {
+    this.selectedDate = this.transactionsMonths[index];
+    this.getTransactionsForMonth(this.selectedAccount.id);
   }
 
   selectUser() {
@@ -98,9 +86,10 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
 
     this.transactionSubscription = this.AccountService.getTransactionMonths(this.selectedAccount.id).subscribe((transactionsMonths: []) => {
       this.transactionsMonths = transactionsMonths;
-      this.selectedDate = this.transactionsMonths[this.transactionsMonths.length - 1];
-      this.monthsSlider.options.initialSlide = this.transactionsMonths.length - 1;
+      this.slideOpts.initialSlide = this.transactionsMonths.length - 1
+      this.monthsSlider.slideTo(this.transactionsMonths.length - 1);
       this.monthsSlider.update();
+      this.selectMonth(this.transactionsMonths.length - 1);
       this.loader = false;
     })
   }
@@ -109,8 +98,9 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
     this.loader = true;
 
     this.transactionSubscription = this.AccountService
-      .getGroupedTransactions(id, this.selectedDate.year, this.selectedDate.month).subscribe((transactions: Transaction[]) => {
-        this.transactions = transactions;
+      .getGroupedTransactions(id, this.selectedDate.year, this.selectedDate.month).subscribe((body: any) => {
+        this.transactions = body.accountGroupedTransactions.reverse();
+        this.startMonthBalance = body.startMonthBalance;
         this.loader = false;
       })
   }

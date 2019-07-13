@@ -60,9 +60,10 @@
   </ion-grid>
 
   <ion-card *ngIf="selectedAccount">
-    <ion-slides #monthsSlider [options]="slideOpts" (ionSlideDidChange)="selectMonth(monthsSlider)">
-      <ion-slide *ngFor="let tm of transactionsMonths">
-        <h1 [class.primary]="tm.year === selectedDate.year && tm.month === selectedDate.month">
+    <ion-slides #monthsSlider [options]="slideOpts">
+      <ion-slide *ngFor="let tm of transactionsMonths; let i = index;" (click)="selectMonth(i)">
+        <h1 *ngIf="selectedDate"
+            [class.primary]="tm.year === selectedDate.year && tm.month === selectedDate.month">
           {{ tm.year }} {{ tm.month | monthDisplay}}
         </h1>
       </ion-slide>
@@ -100,5 +101,8 @@
         </ion-item>
       </ion-item-group>
     </ion-list>
+    <ion-item>
+      Month start balance: {{ startMonthBalance }}
+    </ion-item>
   </ion-card>
 </ion-content>
