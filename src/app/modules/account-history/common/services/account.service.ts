@@ -27,7 +27,7 @@ export class AccountService extends ApiBaseService {
   getGroupedTransactions(accountId: number, year, month): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/${accountId}/${environment.endpoints.GROUPED_TRANSACTIONS}/${year}/${month}`).pipe(
       map((body: any) => {
-        return body;
+        return body.reverse();
       })
     );
   }

@@ -30,7 +30,10 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
         slidesPerView: 2,
         spaceBetween: 20
       },
-   
+      600: {
+        slidesPerView: 3,
+        spaceBetween: 20
+      },
     }
   };
 
@@ -98,9 +101,8 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
     this.loader = true;
 
     this.transactionSubscription = this.AccountService
-      .getGroupedTransactions(id, this.selectedDate.year, this.selectedDate.month).subscribe((body: any) => {
-        this.transactions = body.accountGroupedTransactions.reverse();
-        this.startMonthBalance = body.startMonthBalance;
+      .getGroupedTransactions(id, this.selectedDate.year, this.selectedDate.month).subscribe((transactions: Transaction[]) => {
+        this.transactions = transactions;
         this.loader = false;
       })
   }

@@ -69,13 +69,13 @@
       </ion-slide>
     </ion-slides>
 
-    <ion-list *ngFor="let gt of transactions">
+    <ion-list *ngFor="let gt of transactions; let i = index;">
       <ion-item-group>
         <ion-item-divider>
           <ion-label>{{ gt[0].date | date : "MMM d" }}</ion-label>
         </ion-item-divider>
 
-        <ion-item lines="none" *ngFor="let t of gt">
+        <ion-item lines="none" *ngFor="let t of gt; let j = index;">
           <ion-grid>
             <ion-row class="ion-align-items-center">
               <ion-col size-md="1" size-xs="6">
@@ -88,21 +88,22 @@
               </ion-col>
 
               <ion-col size-md="2" size-xs="6">
-                <span *ngIf="t.transaction.action === 'credit'">+ </span>
-                <span *ngIf="t.transaction.action === 'debit'">- </span>
-                ${{ t.transaction.value }}
+                <span *ngIf="t.transaction.action === 'credit'" class="primary">+${{ t.transaction.value }}</span>
+                <span *ngIf="t.transaction.action === 'debit'" class="danger">-${{ t.transaction.value }}</span>
               </ion-col>
 
               <ion-col size-md="2" size-xs="6">
-                {{ t.transaction.balanceBefore }}
+                ${{ t.transaction.balanceBefore }}
+              </ion-col>
+
+              <ion-col size-xs="12" class="ion-padding"
+                   *ngIf="i === transactions.length - 1 && j === gt.length - 1">
+                Month start balance: ${{ t.transaction.balanceBefore }}
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
       </ion-item-group>
     </ion-list>
-    <ion-item>
-      Month start balance: {{ startMonthBalance }}
-    </ion-item>
   </ion-card>
 </ion-content>

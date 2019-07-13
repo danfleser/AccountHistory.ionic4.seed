@@ -34,6 +34,10 @@ ion-header {
     color: $primary-color;
 }
 
+.danger {
+    color: $danger-color;
+}
+
 ion-content {
     .account-balance {
         ion-card-subtitle {
