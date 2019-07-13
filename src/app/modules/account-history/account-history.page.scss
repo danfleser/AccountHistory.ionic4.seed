@@ -1,0 +1,49 @@
+@import './../../app.scss';
+
+ion-header {
+    ion-grid {
+        ion-row {
+            @extend %flex-center;
+
+            font-size: $font-size-m;
+
+            ion-col {
+                @extend %flex-center;
+
+                &.start {
+                    justify-content: flex-start;
+                }
+
+                &.end {
+                    justify-content: flex-end;
+                }
+            }
+        }
+    }
+}
+
+.select {
+    @extend %flex-center;
+}
+
+.center {
+    @extend %flex-center;
+}
+
+.primary {
+    color: $primary-color;
+}
+
+ion-content {
+    .account-balance {
+        ion-card-subtitle {
+            @extend %flex-center;
+            font-size: $font-size-m;
+        }
+    
+        ion-card-title {
+            @extend %flex-center;
+            font-size: $font-size-xl *2;
+        }
+    }
+}

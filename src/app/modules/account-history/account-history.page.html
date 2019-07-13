@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          Your Account
+          <ion-spinner *ngIf="loader"></ion-spinner>
+        </ion-col>
+        
+        <ion-col>
+          <ion-label class="select">
+            <ion-icon class="ion-padding" name="person"></ion-icon>
+            <span>{{ selectedUser ? '' : 'Select User'}}</span>
+          </ion-label>
+          <ion-select interface="popover" [(ngModel)]="selectedUser" (ngModelChange)="selectUser()">
+            <ion-select-option *ngFor="let user of users" [value]="user">{{ user.name }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!accounts.length">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <ion-card-title class="center">Please select a user that has accounts!</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-content *ngIf="accounts.length">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-card class="ion-padding">
+          <ion-card-header class="account-balance">
+            <ion-card-subtitle>
+              Account Balance
+              <ion-label class="select">
+                <ion-icon class="ion-padding" name="card"></ion-icon>
+                <span>{{ selectedAccount ? '' : 'Select Account'}}</span>
+              </ion-label>
+              <ion-select interface="popover" [(ngModel)]="selectedAccount" (ngModelChange)="selectAccount()">
+                <ion-select-option *ngFor="let account of accounts" [value]="account">{{ account.id }}
+                </ion-select-option>
+              </ion-select>
+            </ion-card-subtitle>
+            <ion-card-title *ngIf="selectedAccount">${{ selectedAccount.balance }}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card *ngIf="selectedAccount">
+    <ion-slides #monthsSlider [options]="slideOpts" (ionSlideDidChange)="selectMonth(monthsSlider)">
+      <ion-slide *ngFor="let tm of transactionsMonths">
+        <h1 [class.primary]="tm.year === selectedDate.year && tm.month === selectedDate.month">
+          {{ tm.year }} {{ tm.month | monthDisplay}}
+        </h1>
+      </ion-slide>
+    </ion-slides>
+
+    <ion-list *ngFor="let gt of transactions">
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>{{ gt[0].date | date : "MMM d" }}</ion-label>
+        </ion-item-divider>
+
+        <ion-item lines="none" *ngFor="let t of gt">
+          <ion-grid>
+            <ion-row class="ion-align-items-center">
+              <ion-col size-md="1" size-xs="6">
+                <ion-icon *ngIf="t.transaction.action === 'credit'" name="add-circle-outline" color="primary"></ion-icon>
+                <ion-icon *ngIf="t.transaction.action === 'debit'" name="remove-circle-outline" color="danger"></ion-icon>
+              </ion-col>
+
+              <ion-col size-md="7" size-xs="6">
+                {{ t.transaction.name }}
+              </ion-col>
+
+              <ion-col size-md="2" size-xs="6">
+                <span *ngIf="t.transaction.action === 'credit'">+ </span>
+                <span *ngIf="t.transaction.action === 'debit'">- </span>
+                ${{ t.transaction.value }}
+              </ion-col>
+
+              <ion-col size-md="2" size-xs="6">
+                {{ t.transaction.balanceBefore }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+  </ion-card>
+</ion-content>

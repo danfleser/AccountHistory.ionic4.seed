@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  serverUrl: 'https://localhost:44308',
+  endpoints: {
+    USERS: "Users",
+    ACCOUNTS: "Accounts",
+    TRANSACTIONS: "Transactions",
+    TRANSACTIONS_MONTHS: "TransactionsMonths",
+    GROUPED_TRANSACTIONS: "GroupedTransactions"
+  }
 };
 
 /*
