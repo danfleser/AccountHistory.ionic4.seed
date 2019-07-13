@@ -32,6 +32,19 @@ ion-header {
 
 .primary {
     color: $primary-color;
+    text-shadow: 1px solid black;
+}
+
+.start-balance {
+    font-size: $font-size-xxl;
+
+    ion-card-subtitle {
+        color: black !important;
+    }
+    
+    ion-card-title {
+        color: $secondary-color !important;
+    }
 }
 
 .danger {

@@ -88,11 +88,13 @@ export class AccountHistoryPage implements OnInit, OnDestroy {
     this.resetTransactions();
 
     this.transactionSubscription = this.AccountService.getTransactionMonths(this.selectedAccount.id).subscribe((transactionsMonths: []) => {
-      this.transactionsMonths = transactionsMonths;
-      this.slideOpts.initialSlide = this.transactionsMonths.length - 1
-      this.monthsSlider.slideTo(this.transactionsMonths.length - 1);
-      this.monthsSlider.update();
-      this.selectMonth(this.transactionsMonths.length - 1);
+      if (transactionsMonths.length) {
+        this.transactionsMonths = transactionsMonths;
+        this.slideOpts.initialSlide = this.transactionsMonths.length - 1
+        this.monthsSlider.slideTo(this.transactionsMonths.length - 1);
+        this.monthsSlider.update();
+        this.selectMonth(this.transactionsMonths.length - 1);
+      }
       this.loader = false;
     })
   }
